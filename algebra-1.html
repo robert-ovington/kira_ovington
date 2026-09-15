@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Section 1.1 — Polynomial Expressions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2F6F4;
+    --paper-line:#D7E4E0;
+    --ink:#132A28;
+    --ink-soft:#3C5754;
+    --board:#1F3B36;
+    --board-light:#2C4E48;
+    --chalk:#F5F1E6;
+    --coral:#D8654A;
+    --coral-deep:#B94E36;
+    --gold:#D9A441;
+    --teal:#2F6F62;
+    --teal-light:#EAF3F0;
+    --wrong:#C0432E;
+    --wrong-light:#FBEAE7;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      linear-gradient(var(--paper-line) 1px, transparent 1px) 0 0/100% 34px,
+      var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px 120px;}
+
+  /* HERO */
+  .hero{
+    background: var(--board);
+    color:var(--chalk);
+    padding:52px 24px 40px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:6px solid var(--gold);
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(245,241,230,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,241,230,0.05) 1px, transparent 1px);
+    background-size:28px 28px;
+    pointer-events:none;
+  }
+  .hero-inner{max-width:760px;margin:0 auto;position:relative;display:flex; justify-content:space-between; gap:20px; align-items:flex-start;}
+  .eyebrow-row{display:flex;gap:10px;align-items:baseline;margin-bottom:14px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);}
+  .hero h1{font-family:'Bitter', serif; font-weight:700; font-size:clamp(26px,5vw,40px); margin:0 0 10px; letter-spacing:-0.01em;}
+  .hero p{max-width:480px;color:#CFE0DB;margin:0 0 20px;font-size:15.5px;}
+  .hero-expr{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:18px;background:rgba(245,241,230,0.08);border:1px solid rgba(245,241,230,0.25);padding:9px 16px;border-radius:8px;color:var(--chalk);}
+
+  /* Star counter */
+  #star-badge{
+    flex:0 0 auto;
+    background:rgba(217,164,65,0.14);
+    border:1px solid rgba(217,164,65,0.5);
+    border-radius:30px;
+    padding:10px 16px;
+    font-family:'JetBrains Mono',monospace;
+    color:var(--gold);
+    font-weight:600;
+    font-size:15px;
+    display:flex; align-items:center; gap:6px;
+    white-space:nowrap;
+    transition:transform .18s ease;
+  }
+  #star-badge.bump{animation:badgeBump .4s ease;}
+  @keyframes badgeBump{
+    0%{transform:scale(1);}
+    35%{transform:scale(1.28);}
+    100%{transform:scale(1);}
+  }
+
+  /* NAV */
+  .navbar{position:sticky; top:0; z-index:40; background:rgba(242,246,244,0.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--paper-line);}
+  .navlist{max-width:760px;margin:0 auto;display:flex; gap:4px; overflow-x:auto; padding:10px 24px; scrollbar-width:none;}
+  .navlist::-webkit-scrollbar{display:none;}
+  .navlist a{flex:0 0 auto;font-size:13px; font-weight:600;color:var(--ink-soft);text-decoration:none;padding:7px 12px;border-radius:20px;white-space:nowrap;border:1px solid transparent;}
+  .navlist a.active{background:var(--board); color:var(--chalk);}
+  .navlist a:not(.active):hover{border-color:var(--paper-line); color:var(--ink);}
+
+  /* SECTIONS */
+  section.topic{padding:44px 0 8px; border-bottom:1px dashed var(--paper-line);}
+  .topic-tag{font-family:'JetBrains Mono',monospace;font-size:12px; color:var(--teal); font-weight:600;margin-bottom:6px;}
+  h2{font-family:'Bitter', serif;font-size:25px; margin:0 0 12px;color:var(--ink);}
+  h3{font-family:'Bitter', serif; font-size:17px; margin:26px 0 8px; color:var(--ink);}
+  h4.quiz-heading{font-family:'Bitter', serif; font-size:16px; margin:30px 0 4px; color:var(--coral-deep); display:flex; align-items:center; gap:8px;}
+  p{margin:0 0 14px; color:var(--ink-soft);}
+  .lead{font-size:15.5px;}
+  .expr{font-family:'JetBrains Mono',monospace; font-weight:600; color:var(--ink);}
+
+  .formula-card{background:var(--teal-light);border:1px solid #C9E1D9;border-radius:var(--radius);padding:15px 20px;font-family:'JetBrains Mono',monospace;font-size:14.5px;color:var(--teal);margin:16px 0;}
+  .formula-card div{margin:4px 0;}
+
+  /* Anatomy widget */
+  .anatomy{display:flex; flex-wrap:wrap; gap:10px;background:var(--board); border-radius:var(--radius);padding:22px; margin:18px 0;}
+  .term-btn{font-family:'JetBrains Mono',monospace;font-size:18px; font-weight:600;background:rgba(245,241,230,0.08);border:1px solid rgba(245,241,230,0.3);color:var(--chalk);padding:8px 14px; border-radius:8px;cursor:pointer;}
+  .term-btn:hover{background:rgba(217,164,65,0.25); border-color:var(--gold);}
+  .term-btn.picked{background:var(--gold); color:var(--board); border-color:var(--gold);}
+  #anatomy-info{min-height:26px;font-size:14.5px;color:var(--ink-soft);background:#fff;border:1px solid var(--paper-line);border-radius:8px;padding:12px 16px;}
+  #anatomy-info b{color:var(--ink);}
+
+  /* Worked example — labeled steps */
+  .worked{border:1px solid var(--paper-line); background:#fff; border-radius:var(--radius); padding:18px 20px 8px; margin:18px 0;}
+  .worked-label{font-size:12px; font-weight:700; letter-spacing:0.03em; color:var(--coral-deep); margin-bottom:4px;}
+  .worked-q{font-size:15px; margin-bottom:14px; color:var(--ink);}
+  .step-row{display:grid; grid-template-columns:34px 1fr; gap:12px; padding:10px 0; border-top:1px dashed var(--paper-line);}
+  .worked .step-row:first-of-type{border-top:none;}
+  .step-num{width:26px; height:26px; border-radius:50%; background:var(--teal); color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; font-family:'Inter',sans-serif;}
+  .step-math{font-family:'JetBrains Mono',monospace; font-size:15px; color:var(--ink); margin-bottom:4px;}
+  .step-explain{font-size:13.5px; color:var(--ink-soft); line-height:1.55;}
+
+  /* practice / reveal (used sparingly, self-check) */
+  .practice{border:1px solid var(--paper-line);border-radius:var(--radius);padding:15px 20px;margin:12px 0;background:#fff;}
+  .practice-q{font-family:'JetBrains Mono',monospace; font-size:14.5px; margin-bottom:10px;}
+  .reveal-btn{font-family:'Inter',sans-serif;font-size:13px; font-weight:600;background:var(--teal); color:#fff;border:none; padding:8px 14px; border-radius:6px;cursor:pointer;}
+  .reveal-btn:hover{background:#255950;}
+  .solution{display:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--paper-line);font-family:'JetBrains Mono',monospace;font-size:13.5px; color:var(--ink-soft);}
+  .solution.show{display:block;}
+
+  /* long division */
+  .longdiv{background:var(--board); color:var(--chalk);font-family:'JetBrains Mono',monospace; font-size:13.5px;border-radius:var(--radius); padding:16px 18px; line-height:1.9;margin:16px 0; overflow-x:auto; white-space:pre;}
+
+  /* QUIZ CARDS */
+  .quiz-card{background:#fff; border:1px solid var(--paper-line); border-top:4px solid var(--teal); border-radius:var(--radius); padding:18px 20px; margin:16px 0; position:relative;}
+  .quiz-card.solved-correct{border-top-color:var(--gold);}
+  .quiz-q{font-weight:600; margin-bottom:4px; color:var(--ink); font-size:15px;}
+  .quiz-context{font-size:13px; color:var(--ink-soft); margin-bottom:10px; font-style:italic;}
+  .opt{display:flex; align-items:center; gap:10px;padding:10px 12px; border-radius:8px;border:1px solid var(--paper-line);margin-bottom:8px; cursor:pointer;font-family:'JetBrains Mono',monospace; font-size:13.5px; transition:transform .12s ease;}
+  .opt:hover{border-color:var(--teal);}
+  .opt.correct{border-color:var(--teal); background:var(--teal-light);}
+  .opt.wrong{border-color:var(--wrong); background:var(--wrong-light); animation:shake .35s ease;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-5px);}
+    75%{transform:translateX(5px);}
+  }
+  .opt.correct{animation:popIn .3s ease;}
+  @keyframes popIn{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.03);}
+    100%{transform:scale(1);}
+  }
+  .feedback{display:none; margin-top:10px; padding:12px 14px; border-radius:8px; font-size:13.5px; line-height:1.5;}
+  .feedback.show{display:block;}
+  .feedback.good{background:var(--teal-light); color:var(--teal); border:1px solid #C9E1D9;}
+  .feedback.bad{background:var(--wrong-light); color:var(--wrong); border:1px solid #F0C6BE;}
+  .hint-row{margin-top:6px;}
+  .hint-btn{background:none; border:none; color:var(--gold); font-weight:600; font-size:12.5px; cursor:pointer; padding:2px 0; font-family:'Inter',sans-serif;}
+  .hint-btn:hover{text-decoration:underline;}
+  .hint-text{display:none; font-size:13px; color:var(--ink-soft); background:#FBF6E9; border:1px dashed var(--gold); border-radius:8px; padding:10px 12px; margin-top:6px;}
+  .hint-text.show{display:block;}
+  .star-earned{position:absolute; top:14px; right:16px; font-size:13px; color:var(--gold); font-weight:700; display:none; font-family:'Inter',sans-serif;}
+  .star-earned.show{display:inline-flex; align-items:center; gap:4px;}
+
+  /* flying star */
+  .fly-star{position:absolute; font-size:20px; pointer-events:none; animation:flyUp .8s ease forwards; z-index:5;}
+  @keyframes flyUp{
+    0%{transform:translateY(0) scale(1); opacity:1;}
+    100%{transform:translateY(-46px) scale(1.4); opacity:0;}
+  }
+
+  /* pop quiz grid */
+  .popquiz-toolbar{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; flex-wrap:wrap; gap:10px;}
+  .popquiz-grid{display:grid; grid-template-columns:1fr; gap:16px;}
+  @media(min-width:640px){ .popquiz-grid{grid-template-columns:1fr 1fr;} }
+  .popquiz-grid .quiz-card{margin:0;}
+
+  .primary-btn{background:var(--coral); color:#fff; border:none;padding:10px 18px; border-radius:8px; font-weight:600;font-size:13.5px; cursor:pointer; font-family:'Inter',sans-serif;}
+  .primary-btn:hover{background:var(--coral-deep);}
+  .ghost-btn{background:transparent; border:1px solid var(--paper-line); color:var(--ink-soft); padding:9px 16px; border-radius:8px; font-weight:600; font-size:13px; cursor:pointer; font-family:'Inter',sans-serif;}
+  .ghost-btn:hover{border-color:var(--teal); color:var(--teal);}
+
+  footer.done{text-align:center; padding:44px 24px 0; color:var(--ink-soft); font-size:14px;}
+
+  @media (max-width:520px){
+    .hero{padding:40px 18px 32px;}
+    .hero-inner{flex-direction:column;}
+    .wrap{padding:0 16px 120px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow-row"><span>ALGEBRA 1</span><span>·</span><span>SECTIONS 1.1–1.10 + REVIEW</span></div>
+      <h1>Polynomial Expressions &amp; Algebra Skills</h1>
+      <p>Learn the process step by step, then test yourself right after each idea — with hints if you get stuck.</p>
+      <div class="hero-expr">5x³ − 3x² + 4x − 6</div>
+    </div>
+    <div id="star-badge">⭐ <span id="star-count">0</span> stars</div>
+  </div>
+</div>
+
+<div class="navbar">
+  <div class="navlist" id="navlist">
+    <a href="#anatomy" class="nav-link active">Anatomy</a>
+    <a href="#add-sub" class="nav-link">1. Add &amp; subtract</a>
+    <a href="#multiply" class="nav-link">2. Multiply</a>
+    <a href="#perfect" class="nav-link">3. Perfect squares</a>
+    <a href="#diffsq" class="nav-link">4. Difference of squares</a>
+    <a href="#divide" class="nav-link">5. Dividing</a>
+    <a href="#binom" class="nav-link">6. Binomial expansion</a>
+    <a href="#identities" class="nav-link">7. Identities</a>
+    <a href="#formulae" class="nav-link">8. Manipulating formulae</a>
+    <a href="#patterns" class="nav-link">9. Algebraic patterns</a>
+    <a href="#solving-eq" class="nav-link">10. Solving equations</a>
+    <a href="#simultaneous" class="nav-link">11. Simultaneous equations</a>
+    <a href="#word-problems" class="nav-link">12. Word problems</a>
+    <a href="#chapter-review" class="nav-link">Chapter review</a>
+    <a href="#popquiz">Pop quiz</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ANATOMY -->
+  <section class="topic" id="anatomy">
+    <div class="topic-tag">FIRST — VOCABULARY</div>
+    <h2>What a polynomial is made of</h2>
+    <p class="lead">Before you can do anything <em>to</em> a polynomial, you need to be able to read one. A polynomial is just a sum of terms, where every term is a number times x raised to a whole, positive power. Click each piece below to see what it's called and why it matters.</p>
+
+    <div class="anatomy">
+      <button class="term-btn" data-info="This is the <b>x³ term</b>. Its coefficient is <b>4</b>. Because 3 is the highest power anywhere in the expression, the whole polynomial has degree 3 — we call it a <b>cubic</b>.">4x³</button>
+      <button class="term-btn" data-info="This is the <b>x² term</b>. Its coefficient is <b>−2</b> (don't forget the sign — it belongs to the term).">−2x²</button>
+      <button class="term-btn" data-info="This is the <b>x term</b>. Its coefficient is <b>5</b>.">+5x</button>
+      <button class="term-btn" data-info="This is the <b>constant term</b> — it has no x attached, so its value never changes. Here it's <b>−6</b>.">−6</button>
+    </div>
+    <div id="anatomy-info">Tap a term above to see what it's called ↑</div>
+
+    <div class="formula-card">
+      <div>degree = the highest power of x you can find</div>
+      <div>degree 1 → linear · degree 2 → quadratic · degree 3 → cubic</div>
+      <div>2 terms → binomial · 3 terms → trinomial</div>
+    </div>
+    <p>Why the degree matters: it tells you at a glance how "complicated" an expression is, and later in the course it tells you how many solutions an equation can have. Get comfortable spotting it before moving on.</p>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-anatomy"></div>
+  </section>
+
+  <!-- 1. ADD/SUBTRACT -->
+  <section class="topic" id="add-sub">
+    <div class="topic-tag">STEP 1 OF 5</div>
+    <h2>Addition &amp; subtraction</h2>
+    <p class="lead">The process here is always the same, in this order: <b>(1) remove every bracket by multiplying out, (2) group terms that match, (3) add or subtract the matching terms.</b> Terms only "match" — are <b>like terms</b> — if they have exactly the same power of x.</p>
+
+    <div class="worked">
+      <div class="worked-label">WORKED EXAMPLE</div>
+      <div class="worked-q">Expand and simplify: <span class="expr">7(x³ + 2x² − 5x) − 2(2 + 3x + 4x² − 2x³)</span></div>
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div><div class="step-math">7(x³+2x²−5x) → 7x³ + 14x² − 35x</div><div class="step-explain">Multiply the 7 into every term inside its bracket, one at a time.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div><div class="step-math">−2(2+3x+4x²−2x³) → −4 − 6x − 8x² + 4x³</div><div class="step-explain">Do the same with the −2. Careful with signs: −2 × −2x³ becomes +4x³.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div><div class="step-math">7x³+14x²−35x −4−6x−8x²+4x³</div><div class="step-explain">Write everything out in one line now that both brackets are gone.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div><div class="step-math">= 11x³ + 6x² − 41x − 4</div><div class="step-explain">Group and combine: (7x³+4x³)=11x³, (14x²−8x²)=6x², (−35x−6x)=−41x, and the lone constant −4 stays as is.</div></div>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="practice-q">Self-check: simplify 3x²(4x² − 5x + 6) + 4x(8x³ − 2x − 3)</div>
+      <button class="reveal-btn" onclick="toggleSolution(this)">Show solution</button>
+      <div class="solution">Step 1: 3x²(4x²−5x+6) = 12x⁴ − 15x³ + 18x²<br>Step 2: 4x(8x³−2x−3) = 32x⁴ − 8x² − 12x<br>Step 3: combine → 44x⁴ − 15x³ + 10x² − 12x</div>
+    </div>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-add-sub"></div>
+  </section>
+
+  <!-- 2. MULTIPLY -->
+  <section class="topic" id="multiply">
+    <div class="topic-tag">STEP 2 OF 5</div>
+    <h2>Multiplying polynomial expressions</h2>
+    <p class="lead">This is the distributive law taken further: <span class="expr">a(b + c) = ab + ac</span>. When both brackets have more than one term, split the first bracket into its separate pieces, and multiply <b>each piece</b> by the whole second bracket in turn. This is called <b>expanding</b>.</p>
+
+    <div class="worked">
+      <div class="worked-label">WORKED EXAMPLE</div>
+      <div class="worked-q">Simplify: <span class="expr">(x − 5)(2x² − 3x + 6)</span></div>
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div><div class="step-math">Split the first bracket: x and −5</div><div class="step-explain">Treat (x − 5) as two separate multipliers that will each hit the second bracket.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div><div class="step-math">x(2x² − 3x + 6) = 2x³ − 3x² + 6x</div><div class="step-explain">Multiply the first piece, x, by every term in the second bracket.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div><div class="step-math">−5(2x² − 3x + 6) = −10x² + 15x − 30</div><div class="step-explain">Now multiply the second piece, −5, by every term in the second bracket. A negative times a negative gives a positive — that's why −3x becomes +15x.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div><div class="step-math">2x³ − 3x² + 6x − 10x² + 15x − 30</div><div class="step-explain">Write both results together in one line.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div><div class="step-math">= 2x³ − 13x² + 21x − 30</div><div class="step-explain">Combine like terms: (−3x²−10x²)=−13x², (6x+15x)=21x. Nothing else matches, so the answer is done.</div></div>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="practice-q">Self-check: expand (x + 4)(2x + 5)</div>
+      <button class="reveal-btn" onclick="toggleSolution(this)">Show solution</button>
+      <div class="solution">Step 1: x(2x+5) = 2x²+5x<br>Step 2: 4(2x+5) = 8x+20<br>Step 3: combine → 2x²+13x+20</div>
+    </div>
+
+    <h4 class="quiz-heading">✏️ Check yourself — what's the next step?</h4>
+    <p style="font-size:13.5px;">These questions walk through expanding (x − 5)(2x² − 3x + 6) one decision at a time, just like the worked example above.</p>
+    <div id="quiz-multiply"></div>
+  </section>
+
+  <!-- 3. PERFECT SQUARES -->
+  <section class="topic" id="perfect">
+    <div class="topic-tag">STEP 3 OF 5</div>
+    <h2>Perfect squares</h2>
+    <p class="lead">(x + a)² and (x − a)² always expand the same predictable way — once you recognise the pattern you never need to multiply it out longhand again.</p>
+
+    <div class="formula-card">
+      <div>(x + a)² = x² + 2ax + a²</div>
+      <div>(x − a)² = x² − 2ax + a²</div>
+    </div>
+
+    <div class="worked">
+      <div class="worked-label">WORKED EXAMPLE</div>
+      <div class="worked-q">Expand: <span class="expr">(2x − 3)²</span></div>
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div><div class="step-math">Match to (a − b)²: a = 2x, b = 3</div><div class="step-explain">Whatever is written first in the bracket is a; whatever is subtracted is b.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div><div class="step-math">a² = (2x)² = 4x²</div><div class="step-explain">Square the whole first term — both the number and the letter.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div><div class="step-math">2ab = 2(2x)(3) = 12x</div><div class="step-explain">Multiply 2 × a × b to get the middle term's size — the formula puts a minus in front of it here.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div><div class="step-math">b² = (3)² = 9</div><div class="step-explain">Square the second term.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div><div class="step-math">= 4x² − 12x + 9</div><div class="step-explain">Put the three pieces together in the pattern a² − 2ab + b².</div></div>
+      </div>
+    </div>
+
+    <div class="worked">
+      <div class="worked-label">WORKED EXAMPLE — WORKING BACKWARDS</div>
+      <div class="worked-q">25x² + px + 16 is a perfect square and p &gt; 0. Find p.</div>
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div><div class="step-math">25x² = (5x)², 16 = (4)²</div><div class="step-explain">Find the square roots of the first and last terms — these must be a and b.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div><div class="step-math">So the expression is (5x + 4)²</div><div class="step-explain">If it really is a perfect square, it must be (a+b)² using the a and b you just found.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div><div class="step-math">2(5x)(4) = 40x, so p = 40</div><div class="step-explain">The middle term of (a+b)² is 2ab — that's what gives you p.</div></div>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="practice-q">Self-check: expand (x + 5)²</div>
+      <button class="reveal-btn" onclick="toggleSolution(this)">Show solution</button>
+      <div class="solution">a=x, b=5 → x² + 2(x)(5) + 5² = x² + 10x + 25</div>
+    </div>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-perfect"></div>
+  </section>
+
+  <!-- 4. DIFFERENCE OF TWO SQUARES -->
+  <section class="topic" id="diffsq">
+    <div class="topic-tag">STEP 4 OF 5</div>
+    <h2>Expanding (x − a)(x + a)</h2>
+    <p class="lead">This is the fastest pattern in the whole section — the middle terms always cancel, so there's nothing to combine at the end.</p>
+
+    <div class="formula-card"><div>(x − a)(x + a) = x² − a²</div></div>
+
+    <div class="worked">
+      <div class="worked-label">WHY IT WORKS</div>
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div><div class="step-math">(x − a)(x + a) = x² + ax − ax − a²</div><div class="step-explain">Expand normally — multiply every term in the first bracket by every term in the second.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div><div class="step-math">+ax and −ax cancel</div><div class="step-explain">These two middle terms are equal and opposite, so they disappear completely.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div><div class="step-math">= x² − a²</div><div class="step-explain">Only the two squared terms are left — that's the whole reason this pattern is worth memorising.</div></div>
+      </div>
+    </div>
+
+    <div class="practice">
+      <div class="practice-q">Self-check: expand (ax − by)(ax + by)</div>
+      <button class="reveal-btn" onclick="toggleSolution(this)">Show solution</button>
+      <div class="solution">Treat ax as one block and by as another: (ax)² − (by)² = a²x² − b²y²</div>
+    </div>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-diffsq"></div>
+  </section>
+
+  <!-- 5. DIVIDING -->
+  <section class="topic" id="divide">
+    <div class="topic-tag">STEP 5 OF 5</div>
+    <h2>Dividing algebraic expressions</h2>
+    <p class="lead">Before dividing, always ask which of these three situations you're in — it decides your whole method.</p>
+
+    <h3>Case 1 — the denominator divides every term</h3>
+    <div class="worked">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div><div class="step-math">6x³−8x²y+4xy²+2x² ÷ 2x</div><div class="step-explain">Check: does 2x go evenly into each of the four terms on top? Yes — so divide them one at a time.</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div><div class="step-math">= 3x² − 4xy + 2y² + x</div><div class="step-explain">6x³÷2x=3x², −8x²y÷2x=−4xy, 4xy²÷2x=2y², 2x²÷2x=x.</div></div>
+      </div>
+    </div>
+
+    <h3>Case 2 — the denominator is a bracket factor</h3>
+    <div class="worked">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div><div class="step-math">6x² + 5xy + y² ÷ (2x + y)</div><div class="step-explain">Factorise the top first: 6x²+5xy+y² = (3x+y)(2x+y).</div></div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div><div class="step-math">(3x+y)(2x+y) ÷ (2x+y) = 3x + y</div><div class="step-explain">The (2x+y) on top cancels with the (2x+y) on the bottom, leaving just the other factor.</div></div>
+      </div>
+    </div>
+
+    <h3>Case 3 — long division</h3>
+    <p>When nothing cancels neatly, divide term by term, the same way you would with numbers.</p>
+    <div class="longdiv">Divide (2x³ − 9x² + 10x − 3) by (x − 3):
+
+              2x² − 3x + 1
+        x − 3 ) 2x³ − 9x² + 10x − 3
+                2x³ − 6x²
+                ───────────
+                    −3x² + 10x
+                    −3x² + 9x
+                    ───────────
+                          x − 3
+                          x − 3
+                          ─────
+                            0
+
+(2x³ − 9x² + 10x − 3) ÷ (x − 3) = 2x² − 3x + 1</div>
+    <p style="font-size:13.5px;">Method: divide the leading term on top by the leading term of the bracket, multiply that answer by the whole bracket, subtract it from the top, then repeat with what's left over — until nothing remains.</p>
+
+    <div class="practice">
+      <div class="practice-q">Self-check: simplify (12a²b) ÷ (3ab)</div>
+      <button class="reveal-btn" onclick="toggleSolution(this)">Show solution</button>
+      <div class="solution">12÷3=4, a²÷a=a, b÷b=1 → 4a</div>
+    </div>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-divide"></div>
+  </section>
+
+  <!-- 6. BINOMIAL EXPANSIONS -->
+  <section class="topic" id="binom">
+    <div class="topic-tag">SECTION 1.5 · BINOMIAL EXPANSIONS</div>
+    <h2>Binomial expansions — using the formula</h2>
+    <p class="lead">Expanding (x+y) to a high power by hand is slow, so instead you match the expression to a ready-made pattern and just plug numbers in. The whole process is: identify x, y and n; write out the general pattern; then substitute and simplify.</p>
+
+    <div class="formula-card">
+      <div>(x + y)ⁿ = (n,0)xⁿ + (n,1)xⁿ⁻¹y + (n,2)xⁿ⁻²y² + … + (n,n)yⁿ</div>
+      <div>(n,r) means "n choose r" — found using the nCr button on a calculator, or read straight off Pascal's triangle</div>
+    </div>
+    <p>A few things worth knowing about (n,r): (n,0) and (n,n) are always 1; (n,1) is always n; and (n,r) always equals (n, n−r) — so you never need to calculate more than half of a row.</p>
+
+    <div class="worked">
+      <div class="worked-label">WORKED EXAMPLE</div>
+      <div class="worked-q">Find the first 3 terms of the expansion of <span class="expr">(1 − 5y)⁸</span></div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">Match to (x+y)ⁿ: x = 1, y = −5y, n = 8</div><div class="step-explain">Line the expression up against the general pattern so you know exactly what to substitute.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">(8,0)x⁸ + (8,1)x⁷y + (8,2)x⁶y² + …</div><div class="step-explain">Write out the first three terms of the general pattern — since x = 1, every power of x just disappears.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">(8,0) = 1, (8,1) = 8, (8,2) = 28</div><div class="step-explain">Work out the three binomial coefficients — by calculator or Pascal's triangle.</div></div></div>
+      <div class="step-row"><div class="step-num">4</div><div><div class="step-math">= 1 + 8(−5y) + 28(−5y)² = 1 − 40y + 700y²</div><div class="step-explain">Substitute y = −5y into each term and simplify, keeping track of the negative sign.</div></div></div>
+    </div>
+
+    <div class="worked">
+      <div class="worked-label">WORKED EXAMPLE — FINDING ONE PARTICULAR TERM</div>
+      <div class="worked-q">Find the 4th term of the expansion of <span class="expr">(3a + b)⁷</span></div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">Match: x = 3a, y = b, n = 7</div><div class="step-explain">Same first move as always — identify the pieces before touching any numbers.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">Term number = r + 1, so the 4th term needs r = 3</div><div class="step-explain">The general term is (n,r)xⁿ⁻ʳyʳ, and counting starts at r = 0 — so the 4th term is always one behind, at r = 3.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">(7,3)(3a)⁴b³ = 35 × 81a⁴ × b³</div><div class="step-explain">Substitute r = 3 into the general term and evaluate (7,3) = 35 and (3a)⁴ = 81a⁴.</div></div></div>
+      <div class="step-row"><div class="step-num">4</div><div><div class="step-math">= 2835a⁴b³</div><div class="step-explain">Multiply the pieces together for the final term.</div></div></div>
+    </div>
+
+    <div class="practice">
+      <div class="practice-q">Self-check: expand (a + 2b)⁴ fully using the Pascal's triangle row 1 4 6 4 1</div>
+      <button class="reveal-btn" onclick="toggleSolution(this)">Show solution</button>
+      <div class="solution">a⁴ + 4a³(2b) + 6a²(2b)² + 4a(2b)³ + (2b)⁴ = a⁴ + 8a³b + 24a²b² + 32ab³ + 16b⁴</div>
+    </div>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-binom"></div>
+  </section>
+
+  <!-- 7. ALGEBRAIC IDENTITIES -->
+  <section class="topic" id="identities">
+    <div class="topic-tag">SECTION 1.6 · ALGEBRAIC IDENTITIES</div>
+    <h2>Algebraic identities</h2>
+    <p class="lead">An identity is an equation that's true for <em>every single value</em> of x, not just one or two. Because of that, the coefficients of matching powers of x on each side must be exactly equal — and that fact is the key to unlocking unknown letters.</p>
+    <div class="formula-card"><div>If two expressions are equal for all values of x, the coefficients of every matching power of x must be equal.</div></div>
+
+    <h3>Finding unknown coefficients</h3>
+    <div class="worked">
+      <div class="worked-q">Find a and b given that <span class="expr">(2x + a)² = 4x² + 12x + b</span> for all values of x</div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">Expand the left-hand side: 4x² + 4ax + a²</div><div class="step-explain">You can't compare anything until both sides are written as full polynomials.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">Compare the x coefficients: 4a = 12 → a = 3</div><div class="step-explain">The x² terms already match (4x² on both sides), so the next useful comparison is the x term.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">Compare the constants: a² = b → b = 9</div><div class="step-explain">With a already known, substitute it into the constant-term comparison to get b.</div></div></div>
+    </div>
+
+    <h3>Building partial fractions from an identity</h3>
+    <p style="font-size:14px;">The process: write the right-hand side as a single fraction, then, since the denominators already match, the top lines (numerators) must be equal for every x. Substituting a smart value of x can make one unknown vanish completely.</p>
+    <div class="worked">
+      <div class="worked-q">Given <span class="expr">1 / [(x+1)(x−2)] = A/(x+1) + B/(x−2)</span>, find A and B</div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">Combine the right side: [A(x−2) + B(x+1)] / [(x+1)(x−2)]</div><div class="step-explain">Put both fractions over the same common denominator so they can be compared directly to the left side.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">Since the denominators match: 1 = A(x−2) + B(x+1)</div><div class="step-explain">If two fractions with the same denominator are equal, their numerators must be equal too.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">Let x = 2: 1 = 3B → B = 1/3</div><div class="step-explain">Choosing x = 2 makes the A(x−2) term disappear completely, leaving only B to solve for.</div></div></div>
+      <div class="step-row"><div class="step-num">4</div><div><div class="step-math">Let x = −1: 1 = −3A → A = −1/3</div><div class="step-explain">Choosing x = −1 makes the B(x+1) term disappear instead, isolating A.</div></div></div>
+    </div>
+
+    <h3>Identities and factors</h3>
+    <p style="font-size:14px;">When one polynomial divides exactly into another, there's no remainder — and setting that remainder to zero (since it must hold for every x) gives you a relationship between the unknown letters.</p>
+    <div class="formula-card"><div>If x² − ax + b is a factor of x³ + 2ax² + 4bx + c, then: (i) b = −a² and (ii) c = 3ab</div></div>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-identities"></div>
+  </section>
+
+  <!-- 8. MANIPULATING FORMULAE -->
+  <section class="topic" id="formulae">
+    <div class="topic-tag">SECTION 1.7 · MANIPULATING FORMULAE</div>
+    <h2>Manipulating formulae</h2>
+    <p class="lead">Making a letter "the subject" of a formula means getting it standing completely alone on one side. The process is always: clear anything blocking it — a square root, a fraction, a bracket — then isolate it, exactly like solving an equation.</p>
+
+    <div class="worked">
+      <div class="worked-q">If <span class="expr">v² = u² + 2as</span>, express a in terms of v, u and s</div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">Move u² to the other side: 2as = v² − u²</div><div class="step-explain">Get everything that isn't "a" onto the opposite side first.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">Divide both sides by 2s: a = (v² − u²) / 2s</div><div class="step-explain">a is being multiplied by 2s, so dividing by 2s leaves a on its own.</div></div></div>
+    </div>
+
+    <div class="worked">
+      <div class="worked-label">A TRICKIER ONE — WITH A SQUARE ROOT</div>
+      <div class="worked-q">If <span class="expr">√[(x+y)/(x−y)] = 1/2</span>, express y in terms of x, then find y when x = 5</div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">Square both sides: (x+y)/(x−y) = 1/4</div><div class="step-explain">Squaring removes the square root, since √a squared is just a.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">Cross-multiply: 4(x+y) = x − y</div><div class="step-explain">Multiply both sides by 4(x−y) to clear both fractions at once.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">Expand: 4x + 4y = x − y</div><div class="step-explain">Multiply out the bracket before moving anything else around.</div></div></div>
+      <div class="step-row"><div class="step-num">4</div><div><div class="step-math">Gather y terms on one side: 5y = −3x</div><div class="step-explain">Move all the y's to the left and all the x's to the right, changing signs as terms cross the equals sign.</div></div></div>
+      <div class="step-row"><div class="step-num">5</div><div><div class="step-math">Divide by 5: y = −3x/5. When x = 5, y = −3</div><div class="step-explain">Once y is isolated, plug in x = 5 to get the numerical answer.</div></div></div>
+    </div>
+
+    <div class="practice">
+      <div class="practice-q">Self-check: given x = (t+4)/(3t+1), find t in terms of x</div>
+      <button class="reveal-btn" onclick="toggleSolution(this)">Show solution</button>
+      <div class="solution">Step 1: multiply both sides by (3t+1): x(3t+1) = t+4<br>Step 2: expand: 3tx + x = t + 4<br>Step 3: gather t terms: 3tx − t = 4 − x<br>Step 4: factorise: t(3x−1) = 4−x<br>Step 5: divide: t = (4−x)/(3x−1)</div>
+    </div>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-formulae"></div>
+  </section>
+
+  <!-- 9. ALGEBRAIC PATTERNS -->
+  <section class="topic" id="patterns">
+    <div class="topic-tag">SECTION 1.8 · ALGEBRAIC PATTERNS</div>
+    <h2>Algebraic patterns</h2>
+    <p class="lead">Every number pattern is checked the same way: look at how much each term changes by (the 1st difference). If that's a constant number, the pattern is linear. If it isn't constant, look at how <em>that</em> changes (the 2nd difference) — if that's constant, the pattern is quadratic.</p>
+    <div class="formula-card">
+      <div>1st difference constant → linear pattern, f(x) = ax + b</div>
+      <div>2nd difference constant → quadratic pattern, f(x) = ax² + bx + c, where 2a = the 2nd difference</div>
+    </div>
+
+    <div class="worked">
+      <div class="worked-label">WORKED EXAMPLE — LINEAR</div>
+      <div class="worked-q">Find f(x) for the pattern <span class="expr">−2, 1, 4, 7, …</span></div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">1st differences: 3, 3, 3 — constant</div><div class="step-explain">Since every term goes up by exactly the same amount, this must be linear.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">a = 3 (the constant 1st difference)</div><div class="step-explain">In a linear pattern, the slope a is simply how much each term increases by.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">b = −2 (the starting term, at x = 0)</div><div class="step-explain">b is just the very first value in the pattern.</div></div></div>
+      <div class="step-row"><div class="step-num">4</div><div><div class="step-math">f(x) = 3x − 2</div><div class="step-explain">Put a and b into f(x) = ax + b.</div></div></div>
+    </div>
+
+    <div class="worked">
+      <div class="worked-label">WORKED EXAMPLE — QUADRATIC</div>
+      <div class="worked-q">A matchstick pattern gives <span class="expr">4, 10, 18, 28, …</span> Find f(x), then the 10th pattern.</div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">1st differences: 6, 8, 10 — not constant</div><div class="step-explain">Since these keep changing, the pattern isn't linear.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">2nd differences: 2, 2 — constant</div><div class="step-explain">A constant 2nd difference confirms this is a quadratic pattern.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">2a = 2 → a = 1, and c = f(0) = 4</div><div class="step-explain">a comes from the constant 2nd difference; c is just the very first term of the pattern.</div></div></div>
+      <div class="step-row"><div class="step-num">4</div><div><div class="step-math">f(1) = a+b+c = 10 → 1+b+4=10 → b = 5</div><div class="step-explain">Use the second term of the pattern (f(1)=10) together with the a and c you already know to solve for b.</div></div></div>
+      <div class="step-row"><div class="step-num">5</div><div><div class="step-math">f(x) = x² + 5x + 4, so f(9) = 81+45+4 = 130</div><div class="step-explain">The pattern starts at x=0, so the 10th pattern is x=9 — substitute and evaluate.</div></div></div>
+    </div>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-patterns"></div>
+  </section>
+
+  <!-- 10. SOLVING EQUATIONS -->
+  <section class="topic" id="solving-eq">
+    <div class="topic-tag">SECTION 1.9 · SOLVING EQUATIONS</div>
+    <h2>Solving linear equations</h2>
+    <p class="lead">When an equation has fractions, the process is always the same: find the lowest common denominator (LCD) of every fraction, rewrite each term over it, then drop the denominators completely and solve what's left like an ordinary equation.</p>
+
+    <div class="worked">
+      <div class="worked-q">Solve: <span class="expr">(2t−3)/5 + 1/20 = (t−1)/4</span></div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">LCD of 5, 20 and 4 is 20</div><div class="step-explain">Find the smallest number that 5, 20 and 4 all divide into evenly.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">4(2t−3)/20 + 1/20 = 5(t−1)/20</div><div class="step-explain">Rewrite each fraction so every one has 20 as its denominator.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">4(2t−3) + 1 = 5(t−1)</div><div class="step-explain">Since every term now shares the same denominator, it can be dropped entirely — multiply the whole equation by 20.</div></div></div>
+      <div class="step-row"><div class="step-num">4</div><div><div class="step-math">8t − 12 + 1 = 5t − 5</div><div class="step-explain">Expand both brackets.</div></div></div>
+      <div class="step-row"><div class="step-num">5</div><div><div class="step-math">3t = 6</div><div class="step-explain">Collect all the t terms on one side and all the plain numbers on the other.</div></div></div>
+      <div class="step-row"><div class="step-num">6</div><div><div class="step-math">t = 2</div><div class="step-explain">Divide both sides by the coefficient of t.</div></div></div>
+    </div>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-solving-eq"></div>
+  </section>
+
+  <!-- 11. SIMULTANEOUS EQUATIONS -->
+  <section class="topic" id="simultaneous">
+    <div class="topic-tag">SECTION 1.10 · SIMULTANEOUS EQUATIONS</div>
+    <h2>Solving simultaneous linear equations</h2>
+    <p class="lead">Two linear equations in x and y usually cross at exactly one point — the one pair of values that satisfies both at the same time. Two reliable methods: <b>substitution</b> (rearrange one equation and plug it into the other) and <b>elimination</b> (scale the equations so a variable cancels when you add or subtract them).</p>
+
+    <div class="worked">
+      <div class="worked-label">METHOD 1 — SUBSTITUTION</div>
+      <div class="worked-q">Solve: <span class="expr">3x − y = 1</span> and <span class="expr">x − 2y = −8</span></div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">Rearrange the easier equation for x: x = −8 + 2y</div><div class="step-explain">Pick whichever variable has a coefficient of 1 — it's the least work to isolate.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">Substitute into the other equation: 3(−8+2y) − y = 1</div><div class="step-explain">Replace every x in the remaining equation with the expression you just found.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">Expand and solve: −24+6y−y=1 → 5y=25 → y=5</div><div class="step-explain">Now there's only one variable left, so solve it exactly as you would any linear equation.</div></div></div>
+      <div class="step-row"><div class="step-num">4</div><div><div class="step-math">Back-substitute: x = −8+2(5) = 2. Point: (2, 5)</div><div class="step-explain">Plug y back into the rearranged equation from step 1 to find x.</div></div></div>
+    </div>
+
+    <div class="worked">
+      <div class="worked-label">METHOD 2 — ELIMINATION</div>
+      <div class="worked-q">Solve: <span class="expr">2x − 5y = 9</span> and <span class="expr">3x + 2y = 4</span></div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">×3 the first, ×2 the second: 6x−15y=27 and 6x+4y=8</div><div class="step-explain">Scale each equation so that x has the exact same coefficient (6x) in both.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">Subtract: −19y = 19 → y = −1</div><div class="step-explain">Subtracting cancels the matching 6x terms, leaving one equation in y alone.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">Substitute into 2x−5y=9: 2x+5=9 → x=2. Point: (2, −1)</div><div class="step-explain">Plug y back into either original equation to find x.</div></div></div>
+    </div>
+
+    <p style="font-size:14px;">With <b>three</b> variables (x, y, z), the idea is the same but in two stages: eliminate the same variable from two different pairs of equations to get two equations in two unknowns, solve those as above, then substitute back to find the third variable.</p>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-simultaneous"></div>
+  </section>
+
+  <!-- 12. WORD PROBLEMS -->
+  <section class="topic" id="word-problems">
+    <div class="topic-tag">SECTION 1.10 · WORD PROBLEMS IN CONTEXT</div>
+    <h2>Turning word problems into equations</h2>
+    <p class="lead">This is the hardest-feeling skill in the chapter, but it's really just careful reading. The process: name your unknowns clearly, then translate the problem <em>one sentence at a time</em> into an equation — don't try to do it all in your head at once. Once you have as many equations as unknowns, solve exactly as before.</p>
+
+    <div class="worked">
+      <div class="worked-label">WORKED EXAMPLE</div>
+      <div class="worked-q">50c, 20c and 10c coins are collected from a machine. The total value is €32. Twice the number of 20c coins, added to the number of 10c coins, equals three times the number of 50c coins. Four times the number of 50c coins, added to the number of 10c coins, equals six times the number of 20c coins. Find the number of each coin.</div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">Let x = number of 50c, y = number of 20c, z = number of 10c</div><div class="step-explain">Always name your unknowns explicitly before writing a single equation — it stops you losing track of what each letter means.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">"Total value is €32" → 50x + 20y + 10z = 3200</div><div class="step-explain">Convert euro to cents (×100) so it matches the coin values, and add up each coin's total contribution.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">"Twice the 20c, plus the 10c, equals three times the 50c" → 2y + z = 3x</div><div class="step-explain">Translate the sentence phrase by phrase, left to right, exactly as it's written.</div></div></div>
+      <div class="step-row"><div class="step-num">4</div><div><div class="step-math">"Four times the 50c, plus the 10c, equals six times the 20c" → 4x + z = 6y</div><div class="step-explain">Same approach again — this gives the third equation needed for three unknowns.</div></div></div>
+      <div class="step-row"><div class="step-num">5</div><div><div class="step-math">Rearrange all three into standard form and solve as a 3-variable system</div><div class="step-explain">From here it's the same elimination process as Section 1.10 — eliminate one letter from two different pairs, then back-substitute.</div></div></div>
+      <div class="step-row"><div class="step-num">6</div><div><div class="step-math">(x, y, z) = (40, 35, 50)</div><div class="step-explain">40 fifty-cent coins, 35 twenty-cent coins, and 50 ten-cent coins.</div></div></div>
+    </div>
+
+    <div class="practice">
+      <div class="practice-q">Self-check: the sum of two numbers is 26. Five times the smaller number taken from four times the larger number gives 5. Let x be the bigger number and y the smaller. Write two equations and solve.</div>
+      <button class="reveal-btn" onclick="toggleSolution(this)">Show solution</button>
+      <div class="solution">Equation 1: x + y = 26<br>Equation 2: 4x − 5y = 5<br>From eq 1: x = 26 − y. Substitute: 4(26−y) − 5y = 5 → 104 − 9y = 5 → y = 11, so x = 15.</div>
+    </div>
+
+    <h4 class="quiz-heading">✏️ Check yourself</h4>
+    <div id="quiz-word-problems"></div>
+  </section>
+
+  <!-- CHAPTER REVIEW -->
+  <section class="topic" id="chapter-review">
+    <div class="topic-tag">PULLING IT ALL TOGETHER</div>
+    <h2>Chapter review — mixed practice</h2>
+    <p class="lead">You've now covered every section in Algebra 1. Exam-style questions mix ideas from across the whole chapter, so the hardest part is often recognising <em>which</em> method a question wants before you even start writing.</p>
+
+    <div class="worked">
+      <div class="worked-label">WORKED EXAMPLE — COMBINING PATTERNS &amp; SIMULTANEOUS EQUATIONS</div>
+      <div class="worked-q">The curve y = ax² + bx + c passes through (0, 1), (2, 9) and (4, 41). Find a, b and c.</div>
+      <div class="step-row"><div class="step-num">1</div><div><div class="step-math">Substitute each point into y = ax²+bx+c</div><div class="step-explain">Every point on the curve must satisfy the equation, so each one gives you a linear equation in a, b and c.</div></div></div>
+      <div class="step-row"><div class="step-num">2</div><div><div class="step-math">(0,1): c = 1</div><div class="step-explain">Substituting x = 0 is always the easiest point to use — every term with an x in it disappears.</div></div></div>
+      <div class="step-row"><div class="step-num">3</div><div><div class="step-math">(2,9): 4a+2b+c=9 → 2a+b=4 (using c=1)</div><div class="step-explain">Substitute the point, then immediately simplify using the value of c you already know.</div></div></div>
+      <div class="step-row"><div class="step-num">4</div><div><div class="step-math">(4,41): 16a+4b+c=41 → 4a+b=10 (using c=1)</div><div class="step-explain">Same again for the third point — you now have two equations in just a and b.</div></div></div>
+      <div class="step-row"><div class="step-num">5</div><div><div class="step-math">Subtract: 2a=6 → a=3, then b=4−2(3)=−2</div><div class="step-explain">With c already known, this has become an ordinary two-variable simultaneous system.</div></div></div>
+      <div class="step-row"><div class="step-num">6</div><div><div class="step-math">f(x) = 3x² − 2x + 1</div><div class="step-explain">Collect a, b and c together into the final quadratic.</div></div></div>
+    </div>
+
+    <h4 class="quiz-heading">🏁 Mixed chapter quiz</h4>
+    <div id="quiz-chapter-review"></div>
+  </section>
+
+  <!-- POP QUIZ -->
+  <section class="topic" id="popquiz" style="border-bottom:none;">
+    <div class="topic-tag">FINAL CHALLENGE</div>
+    <h2>Pop quiz</h2>
+    <p class="lead">A random mix pulled from the entire chapter — Sections 1.1 through 1.10, plus word problems and revision. The questions, their order, and the answer positions shuffle every time you press the button — so it's never quite the same quiz twice.</p>
+    <div class="popquiz-toolbar">
+      <button class="primary-btn" onclick="buildPopQuiz()">🔀 New pop quiz</button>
+      <span id="pop-score" style="font-family:'JetBrains Mono',monospace; font-size:13.5px; color:var(--ink-soft);"></span>
+    </div>
+    <div class="popquiz-grid" id="popquiz-container"></div>
+  </section>
+
+</div>
+
+<footer class="done">🎉 That's the whole Algebra 1 chapter — Sections 1.1 through 1.10, word problems, and revision. Well done getting through it.</footer>
+
+<script>
+  /* ---------- anatomy widget ---------- */
+  document.querySelectorAll('.term-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.term-btn').forEach(b=>b.classList.remove('picked'));
+      btn.classList.add('picked');
+      document.getElementById('anatomy-info').innerHTML = btn.getAttribute('data-info');
+    });
+  });
+
+  /* ---------- reveal solutions (self-check boxes) ---------- */
+  function toggleSolution(btn){
+    const sol = btn.nextElementSibling;
+    sol.classList.toggle('show');
+    btn.textContent = sol.classList.contains('show') ? 'Hide solution' : 'Show solution';
+  }
+
+  /* ---------- nav active state on scroll ---------- */
+  const sections = document.querySelectorAll('section.topic');
+  const links = document.querySelectorAll('.nav-link');
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        links.forEach(l=>l.classList.remove('active'));
+        const match = document.querySelector('.nav-link[href="#'+entry.target.id+'"]');
+        if(match) match.classList.add('active');
+      }
+    });
+  }, {rootMargin:'-40% 0px -50% 0px'});
+  sections.forEach(s=>observer.observe(s));
+
+  /* ---------- star tracking ---------- */
+  let totalStars = 0;
+  const solvedIds = new Set();
+  function awardStar(fromEl){
+    totalStars++;
+    document.getElementById('star-count').textContent = totalStars;
+    const badge = document.getElementById('star-badge');
+    badge.classList.remove('bump'); void badge.offsetWidth; badge.classList.add('bump');
+    if(fromEl){
+      const fly = document.createElement('span');
+      fly.className = 'fly-star';
+      fly.textContent = '⭐';
+      const rect = fromEl.getBoundingClientRect();
+      fly.style.left = (rect.left + rect.width/2 - 10 + window.scrollX) + 'px';
+      fly.style.top = (rect.top + window.scrollY) + 'px';
+      fly.style.position = 'absolute';
+      document.body.appendChild(fly);
+      setTimeout(()=>fly.remove(), 820);
+    }
+  }
+
+  /* ---------- question bank ---------- */
+  const BANK = {
+    anatomy: [
+      {id:'an1', q:"What is the degree of the polynomial 7 + 3x − 3x³ − 6x⁴?", opts:["1","3","4","7"], answer:2,
+       explain:"The highest power of x anywhere in the expression is x⁴, so the degree is 4 — even though it isn't the first term written.",
+       hint:"Degree only cares about the biggest exponent — ignore the order the terms are written in."},
+      {id:'an2', q:"In 4x³ − 4x² + 9x + 3, what is the coefficient of x²?", opts:["4","9","−4","3"], answer:2,
+       explain:"The x² term is −4x², so its coefficient — including the sign — is −4.",
+       hint:"The coefficient is the number sitting directly in front of x², sign included."},
+      {id:'an3', q:"Which of these is a binomial?", opts:["3x² + 2x − 1","5x − 7","x⁴","2x³ + x² + x + 1"], answer:1,
+       explain:"5x − 7 has exactly two terms, which is what makes it a binomial.",
+       hint:"Count how many terms are separated by + or − signs."},
+      {id:'an4', q:"A polynomial has degree 1. What do we call it?", opts:["Quadratic","Cubic","Linear","Constant"], answer:2,
+       explain:"Degree 1 means the highest power of x is x¹ — that's the definition of a linear expression.",
+       hint:"Think of the simplest possible polynomial that still has an x in it."}
+    ],
+    "add-sub": [
+      {id:'as1', q:"Given 7(x³+2x²−5x) − 2(2+3x+4x²−2x³), what should you do first?",
+       opts:["Combine like terms straight away","Multiply out (distribute) each bracket first","Divide every term by 2","Factorise the whole expression"], answer:1,
+       explain:"You can't combine terms while they're still trapped inside brackets — always expand first, then combine.",
+       hint:"Nothing can be grouped together while terms are still locked inside brackets."},
+      {id:'as2', q:"After distributing, you have 7x³+14x²−35x−4−6x−8x²+4x³. What's the next step?",
+       opts:["Multiply every term by 7 again","Group and combine the like terms","Divide the whole thing by x","Expand a second time"], answer:1,
+       explain:"With the brackets gone, the only thing left to do is add up the terms that share the same power of x.",
+       hint:"Look for terms with the exact same power of x — x³ with x³, x² with x², and so on."},
+      {id:'as3', q:"Simplify: 3x² − 6x + 7 + 5x² + 2x − 9",
+       opts:["8x² − 4x − 2","8x² + 4x + 2","2x² − 4x − 2","8x⁴ − 4x − 2"], answer:0,
+       explain:"Add the x² coefficients (3+5=8), then the x coefficients (−6+2=−4), then the constants (7−9=−2).",
+       hint:"Work through the powers one at a time: all the x² terms, then all the x terms, then the numbers alone."},
+      {id:'as4', q:"Which pair below are 'like terms'?",
+       opts:["4x² and 4x","−3x and 7x","5x³ and 5x²","x and 1"], answer:1,
+       explain:"−3x and 7x are both 'x to the power 1', so they can be combined. The others have different powers of x.",
+       hint:"Like terms must share the exact same letter raised to the exact same power."}
+    ],
+    multiply: [
+      {id:'mul1', q:"What's the first step in expanding (x − 5)(2x² − 3x + 6)?",
+       opts:["Multiply x by every term in the second bracket","Multiply −5 by every term in the second bracket","Add x and −5 together","Multiply only the first terms of each bracket"], answer:0,
+       explain:"Working left to right, you deal with the first piece of the first bracket — x — before moving on to −5.",
+       hint:"Split (x − 5) into two separate pieces and deal with one at a time, starting from the left."},
+      {id:'mul2', q:"What do you get when you multiply x by (2x² − 3x + 6)?",
+       opts:["2x³ − 3x² + 6x","2x² − 3x + 6","2x³ + 3x² − 6x","x² − 3x + 6"], answer:0,
+       explain:"x × 2x² = 2x³, x × −3x = −3x², x × 6 = 6x — multiply x by each of the three terms, keeping every sign.",
+       hint:"Multiply x by each of the three terms one at a time, keeping the sign of each term."},
+      {id:'mul3', q:"What's the next step after that?",
+       opts:["Multiply −5 by every term in the second bracket","Stop — the expansion is finished","Divide everything by x","Combine 2x³ and −3x² together"], answer:0,
+       explain:"Only half of the first bracket has been used so far. The −5 still needs to multiply the whole second bracket.",
+       hint:"You've only used one piece of the first bracket — there's still a piece left to distribute."},
+      {id:'mul4', q:"What do you get when you multiply −5 by (2x² − 3x + 6)?",
+       opts:["−10x² + 15x − 30","−10x² − 15x − 30","10x² + 15x − 30","−10x² + 15x + 30"], answer:0,
+       explain:"−5 × 2x² = −10x², −5 × −3x = +15x, −5 × 6 = −30. A negative times a negative becomes positive.",
+       hint:"Watch the signs closely — a negative times a negative always gives a positive."},
+      {id:'mul5', q:"Combine 2x³ − 3x² + 6x with −10x² + 15x − 30. What's the fully simplified result?",
+       opts:["2x³ − 13x² + 21x − 30","2x³ − 7x² + 21x − 30","2x³ − 13x² + 9x − 30","2x³ − 3x² + 21x − 30"], answer:0,
+       explain:"Combine the x² terms: −3x²−10x²=−13x². Combine the x terms: 6x+15x=21x. Nothing else matches, so this is final.",
+       hint:"Line up terms with the same power of x and add their coefficients together."},
+      {id:'mul6', q:"Using the same method, expand (x + 4)(2x + 5).",
+       opts:["2x² + 13x + 20","2x² + 8x + 20","x² + 13x + 20","2x² + 13x + 9"], answer:0,
+       explain:"x(2x+5)=2x²+5x, then 4(2x+5)=8x+20. Combine: 2x²+13x+20.",
+       hint:"With two-term brackets you only need 4 multiplications: First, Outer, Inner, Last (FOIL)."}
+    ],
+    perfect: [
+      {id:'pf1', q:"Which formula applies to (2x − 3)²?",
+       opts:["(a+b)² = a²+2ab+b²","(a−b)² = a²−2ab+b²","(a−b)(a+b) = a²−b²","a³−b³"], answer:1,
+       explain:"There's a minus inside the bracket being squared, so the 'minus' perfect-square formula applies.",
+       hint:"Check the sign inside the bracket — that tells you which version of the formula to use."},
+      {id:'pf2', q:"In (2x − 3)², what should you substitute for a and b in (a−b)² = a²−2ab+b²?",
+       opts:["a = 2x, b = 3","a = 2, b = 3x","a = x, b = 3","a = 3, b = 2x"], answer:0,
+       explain:"Match the bracket to the pattern directly: whatever is squared first (2x) is a, and whatever follows the minus (3) is b.",
+       hint:"a is whatever comes first inside the bracket; b is whatever comes right after the sign."},
+      {id:'pf3', q:"Using a = 2x, what is a²?",
+       opts:["4x²","2x²","4x","6x²"], answer:0,
+       explain:"(2x)² means squaring both the number and the letter: 2²=4 and x²=x², giving 4x².",
+       hint:"Square everything inside the bracket, including the number in front of x."},
+      {id:'pf4', q:"Put it together — what is (2x − 3)² fully expanded?",
+       opts:["4x² − 12x + 9","4x² − 6x + 9","4x² − 12x − 9","2x² − 12x + 9"], answer:0,
+       explain:"a² − 2ab + b² = 4x² − 2(2x)(3) + 9 = 4x² − 12x + 9.",
+       hint:"Use all three pieces: a², then 2ab (with a minus in front), then b²."},
+      {id:'pf5', q:"25x² + px + 16 is a perfect square. What must the two square roots be?",
+       opts:["5x and 4","5x and 8","25x and 4","5x and 16"], answer:0,
+       explain:"√(25x²) = 5x and √16 = 4 — these become the a and b of the perfect square.",
+       hint:"Take the square root of the first term and the square root of the last term separately."},
+      {id:'pf6', q:"Given the expression is (5x + 4)², what must p equal?",
+       opts:["40","20","9","45"], answer:0,
+       explain:"The middle term of (a+b)² is 2ab. Here that's 2(5x)(4) = 40x, so p = 40.",
+       hint:"p is the coefficient of the middle term — that's always 2 × a × b."}
+    ],
+    diffsq: [
+      {id:'ds1', q:"Which pattern does (x − 2)(x + 2) match?",
+       opts:["(a−b)²","(a+b)²","(a−b)(a+b) = a²−b²","a³−b³"], answer:2,
+       explain:"One bracket is minus, the other is plus, with the exact same two terms — that's the difference-of-two-squares pattern.",
+       hint:"Look at the signs: one bracket has a minus, the other a plus, but the terms themselves match."},
+      {id:'ds2', q:"What are a and b in (x − 2)(x + 2)?",
+       opts:["a = x, b = 2","a = 2, b = x","a = x², b = 4","a = x, b = 4"], answer:0,
+       explain:"a and b are the terms exactly as written — not their squares — so a = x and b = 2.",
+       hint:"a and b are the two terms themselves, before any squaring happens."},
+      {id:'ds3', q:"Expand (x − 2)(x + 2).",
+       opts:["x² − 4","x² + 4","x² − 4x + 4","x² − 2x − 4"], answer:0,
+       explain:"a² − b² = x² − 2² = x² − 4. The middle terms always cancel in this pattern.",
+       hint:"The middle terms cancel out completely — you're left with just the two squares, subtracted."},
+      {id:'ds4', q:"Expand (ax − by)(ax + by).",
+       opts:["a²x² − b²y²","a²x² + b²y²","ax² − by²","a²x² − 2abxy − b²y²"], answer:0,
+       explain:"Treat ax as one block and by as another, then apply a²−b²: (ax)²−(by)² = a²x²−b²y².",
+       hint:"Treat 'ax' as one single block and 'by' as another, then apply the difference-of-squares pattern."}
+    ],
+    divide: [
+      {id:'dv1', q:"For (6x³−8x²y+4xy²+2x²) ÷ 2x, which case applies?",
+       opts:["Case 1 — the denominator divides every term","Case 2 — the denominator is a bracket factor","Case 3 — needs long division","None of these"], answer:0,
+       explain:"2x divides evenly into all four terms on top, so you can divide term by term — that's Case 1.",
+       hint:"Check whether 2x divides evenly into every single term on the top — if yes, it's the simplest case."},
+      {id:'dv2', q:"Dividing term by term, what is 6x³ ÷ 2x?",
+       opts:["3x²","3x³","6x²","3"], answer:0,
+       explain:"Divide the numbers (6÷2=3) and subtract the powers of x (x³÷x=x²), giving 3x².",
+       hint:"Divide the number parts and the x parts separately, then put them back together."},
+      {id:'dv3', q:"For (6x²+5xy+y²) ÷ (2x+y), which case applies, and why?",
+       opts:["Case 2 — (2x+y) is a bracket factor of the top","Case 1 — divides term by term","Case 3 — needs long division","It cannot be simplified"], answer:0,
+       explain:"6x²+5xy+y² factorises to (3x+y)(2x+y), and the (2x+y) cancels with the denominator directly.",
+       hint:"Try factorising the top first — does one of its factors match the bottom exactly?"},
+      {id:'dv4', q:"In long division of (2x³−9x²+10x−3) by (x−3), what is the very first step?",
+       opts:["Divide 2x³ by x to get 2x²","Divide −3 by x","Multiply 2x³ by (x−3)","Add (x−3) to 2x³"], answer:0,
+       explain:"Long division always starts by dividing the leading term on top by the leading term of the divisor.",
+       hint:"Only look at the very first term of each polynomial to get started."},
+      {id:'dv5', q:"After getting 2x² as the first part of the answer, what's the next step?",
+       opts:["Multiply 2x² by (x−3), then subtract that from the top","Divide 2x² by (x−3) again","Add 2x² to the next term","Stop — you're already finished"], answer:0,
+       explain:"Just like long division with numbers: multiply the partial answer by the divisor, then subtract to see what's left.",
+       hint:"Think of ordinary number long division — multiply, then subtract, to find the remainder so far."}
+    ],
+    binom: [
+      {id:'bn1', q:"What is (8,0) — that is, 8 choose 0?", opts:["0","1","8","Cannot be found"], answer:1,
+       explain:"(n,0) is always 1, no matter what n is — there's exactly one way to choose nothing.",
+       hint:"This is one of the fixed facts about binomial coefficients — it never needs a calculator."},
+      {id:'bn2', q:"In the expansion of (x+y)⁹, which value of r gives the 4th term?", opts:["r = 3","r = 4","r = 2","r = 5"], answer:0,
+       explain:"Term number = r + 1, so the 4th term corresponds to r = 3.",
+       hint:"Counting starts at r = 0, so the term number is always one more than r."},
+      {id:'bn3', q:"Using (n,r) = (n, n−r), what is (10,7) equal to?", opts:["(10,3)","(10,7)","(7,10)","(10,17)"], answer:0,
+       explain:"n − r = 10 − 7 = 3, so (10,7) = (10,3) — and both give the same number.",
+       hint:"Subtract r from n to find the matching pair on the other side of the row."},
+      {id:'bn4', q:"When expanding (2x − y)⁴ using the general pattern (x+y)ⁿ, what should you substitute?", opts:["x = 2x, y = −y, n = 4","x = 2, y = −y, n = 4","x = x, y = 2x−y, n = 4","x = 2x, y = y, n = 4"], answer:0,
+       explain:"Match term by term: whatever sits where 'x' is in the pattern becomes 2x, and whatever sits where 'y' is becomes −y.",
+       hint:"Line the bracket up against (x+y)ⁿ piece by piece, keeping the sign that's actually there."},
+      {id:'bn5', q:"Which row of Pascal's triangle gives the coefficients for (a+b)⁵?", opts:["1 5 10 10 5 1","1 4 6 4 1","1 6 15 20 15 6 1","1 3 3 1"], answer:0,
+       explain:"Row 5 of Pascal's triangle (counting the top '1' as row 0) is 1 5 10 10 5 1, matching the 6 terms of a degree-5 expansion.",
+       hint:"A power of n has n+1 terms — count rows starting from row 0 at the very top."}
+    ],
+    identities: [
+      {id:'id1', q:"(2x+a)² = 4x²+12x+b for all x. What's the first step?", opts:["Expand the left-hand side","Substitute x = 0 straight away","Divide both sides by 2","Factorise the right-hand side"], answer:0,
+       explain:"Nothing can be compared until both sides are written out as full polynomials — expanding comes first.",
+       hint:"You can't compare coefficients of something that's still inside a bracket."},
+      {id:'id2', q:"After expanding, you have 4x²+4ax+a² = 4x²+12x+b. What should you compare next?", opts:["The coefficients of x on each side","The coefficients of x² on each side","Only the constant terms","Nothing — you already have enough"], answer:0,
+       explain:"The x² terms already match on both sides (4x² = 4x²), so the next useful comparison is the x term, giving 4a = 12.",
+       hint:"Check which power's coefficients already match automatically, then move to the next power."},
+      {id:'id3', q:"For 1/[(x+1)(x−2)] = A/(x+1) + B/(x−2), which x-value finds B fastest?", opts:["x = 2","x = −1","x = 0","x = 1"], answer:0,
+       explain:"Substituting x = 2 makes the A(x−2) term equal zero, leaving an equation with only B in it.",
+       hint:"Pick the value that makes one of the brackets — and therefore one of the unknowns — vanish."},
+      {id:'id4', q:"Which x-value would isolate A instead?", opts:["x = −1","x = 2","x = 1","x = 0"], answer:0,
+       explain:"Substituting x = −1 makes the B(x+1) term vanish, leaving an equation with only A.",
+       hint:"Look for the value that zeroes out the other bracket, (x+1)."},
+      {id:'id5', q:"If x²−ax+b is a factor of x³+2ax²+4bx+c, which relationship is correct?", opts:["b = −a² and c = 3ab","b = a² and c = ab","b = −a and c = 3a","b = 2a² and c = ab"], answer:0,
+       explain:"This is the stated identity relationship: comparing coefficients after long division gives b = −a² and c = 3ab.",
+       hint:"This one is about recalling the specific relationship rather than deriving it from scratch."}
+    ],
+    formulae: [
+      {id:'fm1', q:"To make a the subject of v² = u² + 2as, what's the first step?", opts:["Move u² to the other side","Take the square root of both sides","Divide by v","Multiply by 2s"], answer:0,
+       explain:"Get everything that isn't 'a' onto the other side first — that leaves 2as = v² − u², ready to divide.",
+       hint:"Clear away the terms that don't involve the letter you're isolating, before touching anything else."},
+      {id:'fm2', q:"In √[(x+y)/(x−y)] = 1/2, what's the first step?", opts:["Square both sides","Cross-multiply immediately","Subtract x from both sides","Take the reciprocal of both sides"], answer:0,
+       explain:"Squaring both sides removes the square root in one move, since (√a)² = a.",
+       hint:"Whatever is trapping y needs to be removed first — what operation undoes a square root?"},
+      {id:'fm3', q:"After squaring, you have (x+y)/(x−y) = 1/4. What's next?", opts:["Cross-multiply: 4(x+y) = x−y","Divide both sides by 4 again","Add x and y together","Square both sides again"], answer:0,
+       explain:"Cross-multiplying clears both fractions at once, turning it into a normal equation.",
+       hint:"With a fraction equal to a fraction, multiplying across the equals sign clears both denominators together."},
+      {id:'fm4', q:"Once you reach 4x+4y = x−y, how do you isolate y?", opts:["Gather all the y terms on one side and x terms on the other","Divide everything by 4 immediately","Multiply both sides by y","Add 4x and 4y together"], answer:0,
+       explain:"Move every y term to one side and every x term to the other, changing the sign of anything that crosses over.",
+       hint:"Group like variables together, the same way you would when simplifying any equation."},
+      {id:'fm5', q:"For x = (t+4)/(3t+1), what's the first step to find t in terms of x?", opts:["Multiply both sides by (3t+1)","Divide both sides by t","Subtract 4 from both sides","Square both sides"], answer:0,
+       explain:"Multiplying by the denominator clears the fraction, turning it into x(3t+1) = t+4, which can then be rearranged.",
+       hint:"Clear the fraction first by multiplying both sides by whatever is underneath it."}
+    ],
+    patterns: [
+      {id:'pt1', q:"How do you tell if a number pattern is linear?", opts:["The 1st differences are constant","The 2nd differences are constant","All the terms are positive","The pattern has exactly 4 terms"], answer:0,
+       explain:"A constant amount added between every term — a constant 1st difference — is exactly what makes a pattern linear.",
+       hint:"Linear patterns increase (or decrease) by the same amount every single time."},
+      {id:'pt2', q:"How do you tell if a pattern is quadratic?", opts:["The 2nd differences are constant (while the 1st differences aren't)","The 1st differences are constant","The terms keep increasing","There's no reliable way to tell"], answer:0,
+       explain:"When the 1st differences change but the 2nd differences settle into a constant number, that signals a quadratic pattern.",
+       hint:"Look one level deeper than the 1st difference if that isn't constant."},
+      {id:'pt3', q:"For the pattern −2, 1, 4, 7, …, what is the 1st difference?", opts:["3","1","−2","4"], answer:0,
+       explain:"Each term increases by 3: 1−(−2)=3, 4−1=3, 7−4=3.",
+       hint:"Subtract each term from the one that comes after it."},
+      {id:'pt4', q:"A pattern's 2nd difference is a constant 2. What is a in f(x) = ax²+bx+c?", opts:["1","2","0.5","4"], answer:0,
+       explain:"The rule is 2a = 2nd difference, so 2a = 2 gives a = 1.",
+       hint:"Remember the link between a and the 2nd difference: it's double a, not a itself."},
+      {id:'pt5', q:"For the matchstick pattern 4, 10, 18, 28, …, what is c in f(x) = ax²+bx+c?", opts:["4","10","18","28"], answer:0,
+       explain:"c is simply the value of the pattern at x = 0 — its very first term.",
+       hint:"c is always whatever the pattern starts on, before anything has been added."}
+    ],
+    "solving-eq": [
+      {id:'se1', q:"What's the first step when solving an equation containing several fractions?", opts:["Find the lowest common denominator (LCD) of all the fractions","Cross-multiply straight away","Guess and check values of x","Square both sides"], answer:0,
+       explain:"Finding the LCD lets every term be rewritten with a matching denominator, which can then be dropped entirely.",
+       hint:"You need a common denominator before the fractions can be combined or removed."},
+      {id:'se2', q:"Once every term is written over the same denominator, what can you do?", opts:["Drop the denominators completely and work with the numerators only","Multiply everything by the denominator twice","Add the denominators together","Take the square root of everything"], answer:0,
+       explain:"If every term shares the same denominator, multiplying the whole equation by it removes every denominator in one move.",
+       hint:"Matching denominators can simply be cancelled away, leaving only the tops to deal with."},
+      {id:'se3', q:"Solve: 5x − 3 = 32", opts:["x = 7","x = 6.4","x = 29","x = 35"], answer:0,
+       explain:"Add 3 to both sides (5x = 35), then divide by 5, giving x = 7.",
+       hint:"Undo the subtraction first, then undo the multiplication."},
+      {id:'se4', q:"Solve: 3x + 2 = x + 8", opts:["x = 3","x = 6","x = 2","x = 5"], answer:0,
+       explain:"Subtract x from both sides (2x+2=8), then subtract 2 (2x=6), then divide by 2, giving x=3.",
+       hint:"Get all the x terms on one side and all the plain numbers on the other, one step at a time."},
+      {id:'se5', q:"After clearing fractions and expanding, you reach 8t−12+1 = 5t−5. What's the next step?", opts:["Collect all the t terms on one side and numbers on the other","Divide both sides by 8 immediately","Add 12 to both sides only","Multiply both sides by 5"], answer:0,
+       explain:"With no fractions or brackets left, the only remaining job is to group like terms together and solve.",
+       hint:"This is now an ordinary equation — group the letters, then group the numbers."}
+    ],
+    simultaneous: [
+      {id:'sm1', q:"For x − 2y = −8, what's the smartest first move for substitution?", opts:["Rearrange it to get x on its own: x = −8+2y","Rearrange it to get y on its own","Multiply the whole equation by 3","Add the two equations together"], answer:0,
+       explain:"x already has a coefficient of 1 here, making it the easiest variable to isolate with no extra dividing needed.",
+       hint:"Choose whichever variable is already easiest to get alone — usually the one with a coefficient of 1."},
+      {id:'sm2', q:"After finding x = −8+2y, what's the next step?", opts:["Substitute this expression for x into the other equation","Substitute it back into the same equation","Solve for y without substituting anywhere","Multiply both equations together"], answer:0,
+       explain:"Plugging the expression into the other equation leaves just one variable, y, which can then be solved directly.",
+       hint:"The whole point of finding x in terms of y was to use it somewhere else."},
+      {id:'sm3', q:"For 2x−5y=9 and 3x+2y=4, why multiply the first by 3 and the second by 2?", opts:["So both equations end up with the same x-coefficient (6x), letting it cancel","So both equations get the same y-coefficient","To make the constant terms match","It doesn't matter which numbers are chosen"], answer:0,
+       explain:"Matching the x-coefficients means subtracting the two equations cancels x completely, leaving just y.",
+       hint:"You want the coefficient of whichever variable you plan to eliminate to match exactly in both equations."},
+      {id:'sm4', q:"Once both equations have 6x, how do you eliminate x?", opts:["Subtract one equation from the other","Add the y-coefficients only","Multiply the two equations together","Divide one equation by the other"], answer:0,
+       explain:"Subtracting cancels the matching 6x terms, leaving a single equation in y alone.",
+       hint:"Think about what happens to two identical terms when one is taken away from the other."},
+      {id:'sm5', q:"If two lines are parallel, how many solutions does the simultaneous system have?", opts:["None — the lines never intersect","Exactly one","Infinitely many","Exactly two"], answer:0,
+       explain:"Parallel lines never cross, so there's no (x,y) pair that satisfies both equations at once.",
+       hint:"Picture two parallel lines on a graph — do they ever meet?"},
+      {id:'sm6', q:"For a system of three equations in x, y and z, what's the general first step?", opts:["Eliminate the same variable from two different pairs of equations, reducing to two equations in two unknowns","Solve for all three unknowns using one equation only","Graph all three equations and stop there","Add all three equations together and divide by 3"], answer:0,
+       explain:"Reducing three equations to two (by eliminating the same variable twice) turns the problem into the familiar two-variable case.",
+       hint:"Try to get back to a problem you already know how to solve — two equations, two unknowns."}
+    ],
+    "word-problems": [
+      {id:'wp1', q:"'The sum of two numbers is 26' translates to:", opts:["x + y = 26","x − y = 26","2x + y = 26","x = 2y + 26"], answer:0,
+       explain:"'Sum' always means addition, so the two unknowns simply add together to give 26.",
+       hint:"Look for the operation word — 'sum' has one very specific meaning in maths."},
+      {id:'wp2', q:"'Five times the smaller number taken from four times the larger number gives 5' (x=larger, y=smaller) translates to:", opts:["4x − 5y = 5","5y − 4x = 5","4x + 5y = 5","5x − 4y = 5"], answer:0,
+       explain:"'A taken from B' means B − A, so '5y taken from 4x' becomes 4x − 5y.",
+       hint:"'Taken from' reverses the order you might expect — the second-mentioned quantity comes first in the subtraction."},
+      {id:'wp3', q:"'Twice the number of 20c coins added to the number of 10c coins equals three times the number of 50c coins' (x=50c, y=20c, z=10c) becomes:", opts:["2y + z = 3x","2y + z = 3z","3x + z = 2y","2x + z = 3y"], answer:0,
+       explain:"Translate left to right exactly as written: twice y, plus z, equals three times x.",
+       hint:"Work through the sentence phrase by phrase, in the order the words appear."},
+      {id:'wp4', q:"A total value of €32 needs to be written in cents to match coin values. What does it become?", opts:["3200","32","320","0.32"], answer:0,
+       explain:"Multiply euro by 100 to convert to cents: €32 = 3200c.",
+       hint:"Make sure every quantity in your equation is measured in the same units."},
+      {id:'wp5', q:"When a word problem gives you three unknowns, what's the general strategy?", opts:["Translate each sentence into one equation, then solve as a 3-variable simultaneous system","Guess reasonable numbers until one works","Only use two of the three sentences given","Add all the numbers mentioned together"], answer:0,
+       explain:"Each sentence in the problem is designed to give you exactly one equation — three sentences, three equations, three unknowns.",
+       hint:"Count how many unknowns you have, then make sure you extract that many equations from the text."}
+    ],
+    review: [
+      {id:'cr1', q:"Factorise fully: x³ − 27", opts:["(x−3)(x²+3x+9)","(x−3)(x²−3x+9)","(x−3)³","(x+3)(x²−3x+9)"], answer:0,
+       explain:"This is the difference of two cubes: a³−b³=(a−b)(a²+ab+b²), with a=x and b=3.",
+       hint:"27 = 3³ — recognise this as the a³−b³ pattern from Section 1.1."},
+      {id:'cr2', q:"To find the 6th term of (3x−1)¹¹ using the general term (n,r)xⁿ⁻ʳyʳ, what value of r do you need?", opts:["5","6","4","11"], answer:0,
+       explain:"Term number = r+1, so the 6th term needs r=5.",
+       hint:"Remember: counting starts at r=0, so the term number is always one more than r."},
+      {id:'cr3', q:"A quadratic curve y=ax²+bx+c passes through (0,1). What does this tell you immediately?", opts:["c = 1","a = 1","b = 1","a+b+c = 1"], answer:0,
+       explain:"Substituting x=0 makes every term containing x disappear, leaving y=c — so c=1 directly.",
+       hint:"x=0 is always the fastest point to substitute, because it wipes out every x-term."},
+      {id:'cr4', q:"A number pattern has a constant 2nd difference of 2. What does this tell you about a in f(x)=ax²+bx+c?", opts:["a = 1","a = 2","a = 0.5","a = 4"], answer:0,
+       explain:"The rule is 2a = 2nd difference, so 2a=2 gives a=1.",
+       hint:"The 2nd difference is double a, not a itself."},
+      {id:'cr5', q:"'Four times the length is 12cm more than its perimeter' (perimeter = 2(L+W)) translates to:", opts:["4L = 2(L+W) + 12","4L = 2(L+W) − 12","4L + 12 = 2(L+W)","L = 2(L+W) + 12/4"], answer:0,
+       explain:"'Is 12 more than X' means the quantity equals X + 12, so 4L = perimeter + 12.",
+       hint:"'More than' tells you which side of the equation needs the +12 added to it."},
+      {id:'cr6', q:"A problem gives you three unknowns and three relationships between them. What should you check before solving?", opts:["That you have exactly three independent equations","That all the numbers involved are positive","That the final answer is a whole number","That a graph has been provided"], answer:0,
+       explain:"Three unknowns need three genuinely different equations — if two say the same thing in different words, you won't be able to solve uniquely.",
+       hint:"Matching the number of equations to the number of unknowns is the first thing to confirm."}
+    ]
+  };
+
+  /* ---------- render a single question ---------- */
+  function renderQuestionCard(item, index){
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.id = 'card-' + item.id + '-' + Math.random().toString(36).slice(2,7);
+
+    const qDiv = document.createElement('div');
+    qDiv.className = 'quiz-q';
+    qDiv.textContent = (index!==null ? (index+1)+'. ' : '') + item.q;
+    card.appendChild(qDiv);
+
+    const starTag = document.createElement('span');
+    starTag.className = 'star-earned';
+    starTag.innerHTML = '⭐ solved';
+    card.appendChild(starTag);
+    if(solvedIds.has(item.id)){
+      starTag.classList.add('show');
+      card.classList.add('solved-correct');
+    }
+
+    const optsWrap = document.createElement('div');
+    item.opts.forEach((optText, oi)=>{
+      const opt = document.createElement('div');
+      opt.className = 'opt';
+      opt.textContent = optText;
+      opt.addEventListener('click', ()=>handleAnswer(item, oi, card, optsWrap, feedback, opt));
+      optsWrap.appendChild(opt);
+    });
+    card.appendChild(optsWrap);
+
+    const hintRow = document.createElement('div');
+    hintRow.className = 'hint-row';
+    const hintBtn = document.createElement('button');
+    hintBtn.className = 'hint-btn';
+    hintBtn.textContent = '💡 Need a hint?';
+    const hintText = document.createElement('div');
+    hintText.className = 'hint-text';
+    hintText.textContent = item.hint;
+    hintBtn.addEventListener('click', ()=>{
+      hintText.classList.toggle('show');
+      hintBtn.textContent = hintText.classList.contains('show') ? '💡 Hide hint' : '💡 Need a hint?';
+    });
+    hintRow.appendChild(hintBtn);
+    hintRow.appendChild(hintText);
+    card.appendChild(hintRow);
+
+    const feedback = document.createElement('div');
+    feedback.className = 'feedback';
+    card.appendChild(feedback);
+
+    return card;
+  }
+
+  function handleAnswer(item, chosenIdx, card, optsWrap, feedback, clickedEl){
+    const opts = optsWrap.querySelectorAll('.opt');
+    opts.forEach(o=>o.classList.remove('correct','wrong'));
+    const isCorrect = chosenIdx === item.answer;
+
+    if(isCorrect){
+      opts[chosenIdx].classList.add('correct');
+      feedback.className = 'feedback show good';
+      feedback.innerHTML = '<b>✅ Correct!</b> ' + item.explain;
+      if(!solvedIds.has(item.id)){
+        solvedIds.add(item.id);
+        awardStar(clickedEl);
+        card.classList.add('solved-correct');
+        const tag = card.querySelector('.star-earned');
+        if(tag) tag.classList.add('show');
+      }
+    } else {
+      opts[chosenIdx].classList.add('wrong');
+      opts[item.answer].classList.add('correct');
+      feedback.className = 'feedback show bad';
+      feedback.innerHTML = '<b>❌ Not quite.</b> ' + item.explain;
+    }
+  }
+
+  /* ---------- render fixed section quizzes ---------- */
+  function renderSectionQuiz(containerId, bankKey){
+    const container = document.getElementById(containerId);
+    BANK[bankKey].forEach((item, i)=>{
+      container.appendChild(renderQuestionCard(item, i));
+    });
+  }
+  renderSectionQuiz('quiz-anatomy', 'anatomy');
+  renderSectionQuiz('quiz-add-sub', 'add-sub');
+  renderSectionQuiz('quiz-multiply', 'multiply');
+  renderSectionQuiz('quiz-perfect', 'perfect');
+  renderSectionQuiz('quiz-diffsq', 'diffsq');
+  renderSectionQuiz('quiz-divide', 'divide');
+  renderSectionQuiz('quiz-binom', 'binom');
+  renderSectionQuiz('quiz-identities', 'identities');
+  renderSectionQuiz('quiz-formulae', 'formulae');
+  renderSectionQuiz('quiz-patterns', 'patterns');
+  renderSectionQuiz('quiz-solving-eq', 'solving-eq');
+  renderSectionQuiz('quiz-simultaneous', 'simultaneous');
+  renderSectionQuiz('quiz-word-problems', 'word-problems');
+  renderSectionQuiz('quiz-chapter-review', 'review');
+
+  /* ---------- pop quiz: shuffled subset, shuffled options ---------- */
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+
+  function buildPopQuiz(){
+    const allQuestions = Object.values(BANK).flat();
+    const picked = shuffle(allQuestions).slice(0, 10);
+    const shuffledForRender = picked.map(orig=>{
+      const optPairs = orig.opts.map((text, i)=>({text, isAnswer:i===orig.answer}));
+      const shuffledOpts = shuffle(optPairs);
+      return {
+        id: orig.id,
+        q: orig.q,
+        hint: orig.hint,
+        explain: orig.explain,
+        opts: shuffledOpts.map(p=>p.text),
+        answer: shuffledOpts.findIndex(p=>p.isAnswer)
+      };
+    });
+    const container = document.getElementById('popquiz-container');
+    container.innerHTML = '';
+    shuffledForRender.forEach(item=>{
+      container.appendChild(renderQuestionCard(item, null));
+    });
+    document.getElementById('pop-score').textContent = shuffledForRender.length + ' questions loaded';
+  }
+  buildPopQuiz();
+</script>
+
+</body>
+</html>
